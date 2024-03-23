@@ -6,6 +6,11 @@ import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
 import Button from "./Button";
+import UseAuthModal from "@/hooks/useAuthModal";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useUser } from "@/hooks/useUser";
+import { FaUserAlt } from "react-icons/fa";
+import toast from "react-hot-toast/headless";
 
 interface headerProps{
     children: React.ReactNode;
@@ -16,9 +21,26 @@ const Header:React.FC<headerProps> = ({
     children,
     className,
 }) => {
+    const authModal= UseAuthModal();
     const router=useRouter();
-    const handleLogout = () => {
-        // Handle Logout in the future
+    const supabaseClient = useSupabaseClient();
+    const { user } = useUser();
+    const handleLogout = async () => {
+        // Handle Logout feature
+        const { error } = await supabaseClient.auth.signOut();
+        // Todo: To reset any playing songs
+        router.refresh();
+        if(error)
+        {
+            console.log(error);
+            toast.error(error.message);
+        }
+        else
+        {
+            console.log('Logged Out!!');
+            toast.success('Logged Out!!');
+            
+        }
     };
     return (
         <div className={twMerge(`
@@ -98,30 +120,53 @@ const Header:React.FC<headerProps> = ({
                     items-center
                     gap-x-4
                 ">
-                    <>
-                        <div>
-                            <Button 
-                                onClick={()=>{}}
-                                className="
-                                bg-transparent
-                                text-neutral-300
-                                font-medium
-                            ">
-                                SIGN UP
+                    {user ? ( // For the User Logged In part
+                        <div
+                            className="
+                                flex
+                                gap-x-4
+                                items-center
+                            "
+                        >
+                            <Button
+                                onClick={handleLogout}
+                                className="bg-white px-6 py-2"
+                            >
+                                LOGOUT
+                            </Button>
+                            <Button
+                                onClick={() => router.push('/account')}
+                                className="bg-white"
+                            >
+                                <FaUserAlt />
                             </Button>
                         </div>
-                        <div>
-                            <Button 
-                                onClick={()=>{}}
-                                className="
-                                bg-white
-                                px-6
-                                py-2
-                            ">
-                                LOG IN
-                            </Button>
-                        </div>
-                    </>
+                    ) : (
+                        <>
+                            <div>
+                                <Button 
+                                    onClick={authModal.onOpen} // When we click on Sign Up it opens the form for signing in 
+                                    className="
+                                    bg-transparent
+                                    text-neutral-300
+                                    font-medium
+                                ">
+                                    SIGN UP
+                                </Button>
+                            </div>
+                            <div>
+                                <Button 
+                                    onClick={authModal.onOpen}
+                                    className="
+                                    bg-white
+                                    px-6
+                                    py-2
+                                ">
+                                    LOG IN
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
             {children}
