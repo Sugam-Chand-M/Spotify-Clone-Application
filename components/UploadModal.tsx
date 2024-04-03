@@ -109,7 +109,6 @@ const UploadModal = () => {
                 setIsLoading(false);
                 console.log(supabaseError.message);
                 return toast.error(supabaseError.message);
-                
             }
 
             router.refresh();
@@ -164,7 +163,7 @@ const UploadModal = () => {
                         type="file"
                         disabled={isLoading}
                         accept=".mp3"
-                        {...register('title',{required:true})}
+                        {...register('song',{required:true})}
                     />
                 </div>
                 <div>
@@ -176,7 +175,7 @@ const UploadModal = () => {
                         type="file"
                         disabled={isLoading}
                         accept="image/*"
-                        {...register('title',{required:true})}
+                        {...register('image',{required:true})}
                     />
                 </div>
                 <Button disabled={isLoading} type="submit">
