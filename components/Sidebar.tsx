@@ -6,13 +6,16 @@ import { HiHome } from "react-icons/hi";
 import Box from "./Box";
 import SidebarItem from "./SidebarItem";
 import Library from "./Library";
+import { Song } from "@/types";
 
 interface sidebarProps{
     children: React.ReactNode;
+    songs: Song[];
 }
 
 const Sidebar:React.FC<sidebarProps> = ({ // Always capitalise the starting Letter of the the items being exported as Typescript will yell at the small letter [https://stackoverflow.com/questions/37414304/typescript-complains-property-does-not-exist-on-type-jsx-intrinsicelements-whe]
-    children // to extract the children
+    children, // to extract the children
+    songs
 }) => {
     const pathname=usePathname(); // hook for sidebarProps
     // creating an array of routes for multiple components
@@ -64,7 +67,7 @@ const Sidebar:React.FC<sidebarProps> = ({ // Always capitalise the starting Lett
                 
                 <Box classname="overflow-y-auto h-full">
                     {/*Song Library*/}
-                    <Library />
+                    <Library songs={songs} />
                 </Box>
             </div>
             <main className="h-full flex-1 overflow-y-auto py-2">
