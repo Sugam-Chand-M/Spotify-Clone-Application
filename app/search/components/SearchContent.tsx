@@ -3,6 +3,7 @@
 import MediaItem from "@/components/MediaItem";
 import { Song } from "@/types";
 import React from "react";
+import LikeButton from "@/components/LikeButton";
 
 interface searchContentProps{
     songs: Song[];
@@ -43,6 +44,7 @@ const SearchContent:React.FC<searchContentProps> = ({
                         />
                     </div>
                     {/* Todo - Like Button Implementation */}
+                    <LikeButton songId={song.id}/>
                 </div>
             ))}
         </div>
