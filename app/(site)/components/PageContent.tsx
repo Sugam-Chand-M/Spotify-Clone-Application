@@ -2,15 +2,17 @@
 
 import { Song } from "@/types";
 import SongItem from "@/components/SongItem";
+import useOnPlay from "@/hooks/useOnPlay";
 
 interface pageContentProps{
     songs: Song[];
 };
 
-const PageContent:React.FC<pageContentProps> = (
-    songs
-) => {
-    if(songs.songs.length === 0) // if we use songs.length an issue occurs[ Caused as Any props we pass to our components will be given as properties of that object ]. Solution - https://stackoverflow.com/questions/75952744/property-map-does-not-exist-on-type-menuitemsprops-ts2339
+const PageContent:React.FC<pageContentProps> = ({
+    songs,
+}) => {
+    const onPlay = useOnPlay(songs);
+    if(songs.length === 0) // if we use songs.length an issue occurs[ Caused as Any props we pass to our components will be given as properties of that object ]. Solution - https://stackoverflow.com/questions/75952744/property-map-does-not-exist-on-type-menuitemsprops-ts2339
     {
         return (
             <div className="mt-4 text-neutral-400">
@@ -34,10 +36,10 @@ const PageContent:React.FC<pageContentProps> = (
             "
         >
             {/* Page Content */}
-            {songs.songs.map((item)=>(  // if we use songs.map an issue occurs[ Caused as Any props we pass to our components will be given as properties of that object ]. Solution -  https://stackoverflow.com/questions/75952744/property-map-does-not-exist-on-type-menuitemsprops-ts2339
+            {songs.map((item)=>(  // if we use songs.map an issue occurs[ Caused as Any props we pass to our components will be given as properties of that object ]. Solution -  https://stackoverflow.com/questions/75952744/property-map-does-not-exist-on-type-menuitemsprops-ts2339
                 <SongItem 
                     key={item.id}
-                    onClick={()=>{}}
+                    onClick={(id: string)=> onPlay(id)}
                     data={item}
                 />
             ))}
